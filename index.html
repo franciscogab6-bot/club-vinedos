@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Club Los Viñedos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rubik:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE everyday, a real app a customer would download
+   IDEA the punch card a burger joint stamps, turned into a phone app
+   PICTURE the stamp card with five burger stamps, then the live QR
+   COLOUR wine red ground fields (Los Viñedos), mustard support, ketchup accent
+   TYPE Rubik for display, Inter for text
+   LAYOUT one phone screen; on a laptop the phone sits centred */
+:root{color-scheme:light dark;--bg:light-dark(#f4efe9,#120a0d);--app:light-dark(#ffffff,#1c1215);--ink:light-dark(#1d1416,#f6eef0);--mute:light-dark(#6f6266,#b7a8ac);--wine:#6e1230;--wine2:#8f1d40;--mus:#f3b53d;--red:#e2412b;--line:light-dark(#eadfe2,#33242a);--soft:light-dark(#f8f1f3,#251a1e)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 Inter,system-ui,sans-serif;overflow-x:clip;display:flex;justify-content:center}
+.phone{width:100%;max-width:430px;height:100%;background:var(--app);position:relative;display:flex;flex-direction:column;overflow:hidden}
+@media(min-width:600px){body{align-items:center;padding:24px}.phone{height:min(880px,100%);border-radius:36px;box-shadow:0 0 0 10px #000,0 30px 60px rgba(0,0,0,.25)}}
+h1,h2,h3{font-family:Rubik,Inter,sans-serif;margin:0;line-height:1.08;letter-spacing:-.02em}
+h1{font-size:32px;font-weight:800}h2{font-size:22px;font-weight:700}h3{font-size:17px;font-weight:700}
+p{margin:0}
+.scr{display:none;flex:1;overflow-y:auto;flex-direction:column}
+.scr.on{display:flex}
+.pad{padding:20px 18px}
+.btn{font:600 16px Inter,sans-serif;border:0;border-radius:14px;min-height:52px;padding:0 18px;width:100%;cursor:pointer;background:var(--wine);color:#fff}
+.btn:active{transform:scale(.98)}
+.btn.alt{background:var(--soft);color:var(--ink)}
+.btn.mus{background:var(--mus);color:#2a1a05}
+.btn:disabled{opacity:.55;cursor:default}
+.btn:focus-visible,.tab:focus-visible,input:focus-visible{outline:3px solid var(--mus);outline-offset:2px}
+.link{background:none;border:0;color:var(--wine2);font:600 15px Inter,sans-serif;cursor:pointer;padding:10px;min-height:44px}
+:root[data-theme=dark] .link{color:var(--mus)}
+@media(prefers-color-scheme:dark){:root:not([data-theme=light]) .link{color:var(--mus)}}
+label{font-size:14px;font-weight:600;display:block;margin:14px 0 6px}
+input{width:100%;font:16px Inter,sans-serif;padding:13px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--app);color:var(--ink)}
+.hero{background:var(--wine);color:#fff;padding:28px 20px 30px;position:relative;overflow:hidden}
+.hero p{color:#f3dbe2}
+.logo{display:flex;align-items:center;gap:10px;font:800 15px Rubik,sans-serif;margin-bottom:22px}
+.logo svg{width:38px;height:38px}
+.welcome-pic{width:100%;height:200px;display:block;margin-top:18px}
+.top{background:var(--wine);color:#fff;padding:18px 18px 22px}
+.top p{color:#f3dbe2;font-size:14px}
+.card{background:var(--app);color:var(--ink);border-radius:20px;padding:18px;margin-top:16px;box-shadow:0 8px 24px rgba(40,5,15,.18)}
+.stamps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;margin:14px 0 10px}
+.st{aspect-ratio:1;border-radius:50%;border:2px dashed var(--line);display:grid;place-items:center;font:700 13px Rubik;color:var(--mute)}
+.st.full{border:0;background:var(--mus)}
+.st.full svg{width:70%;height:70%}
+.st.gift{border:2px solid var(--red);color:var(--red)}
+.bar{height:8px;border-radius:8px;background:var(--soft);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--red);border-radius:8px;transition:width .6s}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.small{font-size:13px;color:var(--mute)}
+.here{margin-top:16px}
+.promo{border-radius:18px;padding:16px;margin-top:14px;display:flex;gap:14px;align-items:center;background:var(--soft)}
+.promo .ic{flex:none;width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--mus)}
+.promo .ic svg{width:30px;height:30px}
+.promo.hot{background:var(--wine);color:#fff}.promo.hot .small{color:#f3dbe2}
+.tag{display:inline-block;font:700 12px Inter;padding:3px 9px;border-radius:20px;background:var(--red);color:#fff;margin-bottom:6px}
+.nav{display:none;border-top:1px solid var(--line);background:var(--app);padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px))}
+.nav.on{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.tab{background:none;border:0;color:var(--mute);font:600 12px Inter;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 0;min-height:52px;cursor:pointer;border-radius:12px}
+.tab svg{width:24px;height:24px}
+.tab.on{color:var(--wine2)}
+:root[data-theme=dark] .tab.on{color:var(--mus)}
+.list .it{display:flex;gap:12px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+.dot{flex:none;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;background:var(--soft);color:var(--wine2)}
+.dot svg{width:22px;height:22px}
+.prize{border:1.5px solid var(--line);border-radius:18px;padding:16px;margin-top:12px}
+.prize.ready{border-color:var(--mus);background:color-mix(in srgb,var(--mus) 14%,var(--app))}
+.prize .row{margin-bottom:10px}
+.ov{position:absolute;inset:0;background:var(--wine);color:#fff;display:none;flex-direction:column;align-items:center;text-align:center;padding:22px 20px;z-index:5;overflow-y:auto}
+.ov.on{display:flex}
+.ov.red{background:#3d0a1a}
+.ov p{color:#f3dbe2}
+.qrbox{background:#fff;border-radius:22px;padding:16px;margin:20px 0 14px;width:min(270px,78vw);aspect-ratio:1;position:relative}
+.qrbox svg{width:100%;height:100%;display:block}
+.timer{display:flex;align-items:center;gap:10px;font-weight:600;font-variant-numeric:tabular-nums}
+.ring{width:34px;height:34px}
+.ok{display:none;flex-direction:column;align-items:center;margin-top:30px}
+.ok.on{display:flex}
+.okbadge{width:140px;height:140px;border-radius:50%;background:var(--mus);display:grid;place-items:center;color:#2a1a05;font:800 34px Rubik;animation:pop .5s ease}
+@keyframes pop{0%{transform:scale(.4)}70%{transform:scale(1.1)}100%{transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){.okbadge{animation:none}.bar i{transition:none}}
+.note{font-size:13px;text-align:center;color:var(--mute);padding:6px 16px 14px}
+.close{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.15);color:#fff;border:0;border-radius:50%;width:44px;height:44px;font-size:22px;cursor:pointer}
+.demo{margin-top:auto;padding-top:18px;width:100%}
+.demo .btn{background:#fff;color:var(--wine)}
+</style>
+</head>
+<body>
+<div class="phone">
+
+<!-- 1. Bienvenida (al escanear el QR del local) -->
+<section class="scr on" id="s-hola">
+  <div class="hero">
+    <div class="logo"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="20" fill="#f3b53d"/><path d="M8 19a12 9 0 0 1 24 0z" fill="#6e1230"/><rect x="8" y="21" width="24" height="3" rx="1.5" fill="#e2412b"/><path d="M8 26h24a4 4 0 0 1-4 4H12a4 4 0 0 1-4-4z" fill="#6e1230"/></svg>Hamburguesas Los Viñedos</div>
+    <h1>Bienvenido al Club Los Viñedos</h1>
+    <p style="margin-top:10px">Junta visitas desde tu cel y gana papas, bebidas y combos. Sin tarjetas de cartón y sin descargar nada.</p>
+    <svg class="welcome-pic" viewBox="0 0 360 200" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <ellipse cx="180" cy="186" rx="130" ry="10" fill="#4a0b20"/>
+      <path d="M70 110a110 78 0 0 1 220 0z" fill="#f3b53d"/><path d="M70 110a110 78 0 0 1 220 0" fill="none" stroke="#ffd27a" stroke-width="6" opacity=".6"/>
+      <g fill="#fff6dc"><ellipse cx="140" cy="62" rx="6" ry="3"/><ellipse cx="180" cy="50" rx="6" ry="3"/><ellipse cx="220" cy="64" rx="6" ry="3"/><ellipse cx="160" cy="84" rx="6" ry="3"/><ellipse cx="205" cy="86" rx="6" ry="3"/></g>
+      <path d="M60 116q30-14 60 0t60 0 60 0 60 0v14H60z" fill="#7cc04a"/>
+      <rect x="58" y="128" width="244" height="22" rx="11" fill="#5a2a14"/>
+      <path d="M62 150h236l-12 10H74z" fill="#f2c94c"/>
+      <path d="M66 158h228a14 14 0 0 1-14 22H80a14 14 0 0 1-14-22z" fill="#e8a12f"/>
+      <g transform="translate(262 18)"><rect width="78" height="78" rx="16" fill="#fff"/><g fill="#1d1416"><rect x="10" y="10" width="20" height="20" rx="3"/><rect x="48" y="10" width="20" height="20" rx="3"/><rect x="10" y="48" width="20" height="20" rx="3"/><rect x="40" y="40" width="8" height="8"/><rect x="52" y="48" width="8" height="8"/><rect x="60" y="60" width="8" height="8"/><rect x="40" y="58" width="8" height="8"/></g></g>
+    </svg>
+  </div>
+  <div class="pad" style="display:grid;gap:12px">
+    <div class="row" style="gap:12px;align-items:flex-start"><div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M9 9h2v2H9zM13 13h2v2h-2z"/></svg></div><p><b>Muestra tu QR</b> al pagar y se registra tu visita.</p></div>
+    <div class="row" style="gap:12px;align-items:flex-start"><div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 3l2.6 5.4 5.9.8-4.3 4.1 1 5.8L12 16.4 6.8 19.1l1-5.8L3.5 9.2l5.9-.8z"/></svg></div><p><b>A la 5ta visita</b>, papas gratis. A la 10ma, un combo.</p></div>
+    <div class="row" style="gap:12px;align-items:flex-start"><div class="dot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><p><b>Horas Club:</b> en horarios especiales tu visita cuenta doble.</p></div>
+    <button class="btn" id="go-reg">Crear mi cuenta gratis</button>
+    <button class="link" id="go-login">Ya tengo cuenta, iniciar sesión</button>
+  </div>
+</section>
+
+<!-- 2. Registro -->
+<section class="scr" id="s-reg">
+  <div class="pad">
+    <button class="link" style="padding-left:0" data-go="s-hola">‹ Regresar</button>
+    <h1 style="margin-top:6px" id="reg-title">Crea tu cuenta</h1>
+    <p class="small" style="margin-top:8px">Solo una cuenta por celular.</p>
+    <form id="f-reg">
+      <div id="f-name"><label for="nom">Nombre</label><input id="nom" autocomplete="given-name" value="Gabriel"></div>
+      <label for="mail">Correo</label><input id="mail" type="email" autocomplete="email" value="gabriel@correo.com">
+      <label for="pass">Contraseña</label><input id="pass" type="password" autocomplete="new-password" value="hamburguesa">
+      <button class="btn" style="margin-top:22px" type="submit" id="reg-btn">Crear cuenta</button>
+    </form>
+  </div>
+</section>
+
+<!-- 3. Verificación de correo -->
+<section class="scr" id="s-ver">
+  <div class="pad" style="text-align:center;margin:auto 0">
+    <svg viewBox="0 0 120 90" width="140" style="margin:0 auto 18px;display:block"><rect x="6" y="10" width="108" height="72" rx="10" fill="#f3b53d"/><path d="M8 14l52 38 52-38" fill="none" stroke="#6e1230" stroke-width="6" stroke-linejoin="round"/><circle cx="100" cy="16" r="14" fill="#e2412b"/><path d="M94 16l4 4 8-8" fill="none" stroke="#fff" stroke-width="3"/></svg>
+    <h2>Revisa tu correo</h2>
+    <p class="small" style="margin:10px 0 24px">Te mandamos un enlace a <b id="ver-mail">gabriel@correo.com</b> para activar tu cuenta.</p>
+    <button class="btn" id="ver-ok">Ya lo abrí, entrar</button>
+  </div>
+</section>
+
+<!-- 4. Inicio -->
+<section class="scr" id="s-home">
+  <div class="top">
+    <div class="row"><p>Hola, <b id="h-name" style="color:#fff">Gabriel</b></p><p class="small" style="color:#f3dbe2">Los Viñedos</p></div>
+    <div class="card">
+      <div class="row"><h3>Tu tarjeta</h3><span class="small"><b id="h-count" style="color:var(--ink)">4</b> de 5 visitas</span></div>
+      <div class="stamps" id="stamps"></div>
+      <div class="bar"><i id="h-bar" style="width:80%"></i></div>
+      <p class="small" style="margin-top:8px" id="h-msg">Te falta 1 visita para tus papas gratis.</p>
+    </div>
+  </div>
+  <div class="pad" style="padding-top:6px">
+    <button class="btn mus here" id="btn-here">Estoy en Los Viñedos, mostrar mi QR</button>
+    <p class="small" id="here-msg" style="text-align:center;margin-top:8px">Enséñalo en caja al pagar. Una visita por día.</p>
+    <div class="promo hot"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><div><span class="tag">Solo en la app</span><h3>Horas Club: visita doble</h3><p class="small">Lunes a jueves de 3 a 6 pm tu visita vale por 2.</p></div></div>
+    <div class="promo"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2"><path d="M4 12a8 6 0 0 1 16 0z"/><path d="M4 15h16M5 18h14"/></svg></div><div><h3>Burger del mes: Pizza Burger Combo</h3><p class="small">Exclusiva para socios del Club, $109.</p></div></div>
+  </div>
+</section>
+
+<!-- 5. Premios -->
+<section class="scr" id="s-prem">
+  <div class="pad">
+    <h1>Premios</h1>
+    <p class="small" style="margin-top:6px">Tienes <b id="p-total" style="color:var(--ink)">4</b> visitas en total.</p>
+    <div id="prizes"></div>
+  </div>
+</section>
+
+<!-- 6. Promos -->
+<section class="scr" id="s-promo">
+  <div class="pad">
+    <h1>Promos del Club</h1>
+    <p class="small" style="margin-top:6px">Solo para socios con la app.</p>
+    <div class="promo hot"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></svg></div><div><span class="tag">Horas Club</span><h3>Visita doble</h3><p class="small">Lunes a jueves, de 3 a 6 pm.</p></div></div>
+    <div class="promo"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2"><path d="M6 4h12l-1.5 16h-9z"/><path d="M6 8h12"/></svg></div><div><h3>Limonada de bienvenida</h3><p class="small">En tu primera visita con la app.</p></div></div>
+    <div class="promo"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2"><path d="M4 12a8 6 0 0 1 16 0z"/><path d="M4 15h16M5 18h14"/></svg></div><div><h3>Burger del mes</h3><p class="small">Pizza Burger Combo, exclusiva del Club, $109.</p></div></div>
+    <div class="promo"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#2a1a05" stroke-width="2"><rect x="4" y="7" width="16" height="13" rx="2"/><path d="M12 7v13M4 11h16M12 7c-2-4-6-3-5 0M12 7c2-4 6-3 5 0"/></svg></div><div><h3>Tu cumpleaños</h3><p class="small">Visita doble toda la semana de tu cumple.</p></div></div>
+  </div>
+</section>
+
+<!-- 7. Historial -->
+<section class="scr" id="s-hist">
+  <div class="pad">
+    <h1>Mis visitas</h1>
+    <div class="list" id="hist" style="margin-top:8px"></div>
+    <button class="btn alt" style="margin-top:24px" id="reset">Reiniciar demo</button>
+  </div>
+</section>
+
+<nav class="nav" id="nav">
+  <button class="tab on" data-tab="s-home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 11l8-7 8 7v9H4z"/></svg>Inicio</button>
+  <button class="tab" data-tab="s-prem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8v12M3 8h18M12 8c-2-4-6-3-5 0M12 8c2-4 6-3 5 0"/></svg>Premios</button>
+  <button class="tab" data-tab="s-promo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 12l-8 8-8-8V4h8z"/><circle cx="8.5" cy="8.5" r="1.5"/></svg>Promos</button>
+  <button class="tab" data-tab="s-hist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 6h14M5 12h14M5 18h9"/></svg>Visitas</button>
+</nav>
+
+<!-- QR de visita / canje -->
+<div class="ov" id="ov">
+  <button class="close" id="ov-x" aria-label="Cerrar">×</button>
+  <h2 id="ov-title" style="margin-top:20px">Tu visita de hoy</h2>
+  <p id="ov-sub" style="margin-top:8px">Enséñale este código al cajero.</p>
+  <div id="ov-live" style="display:flex;flex-direction:column;align-items:center">
+    <div class="qrbox"><svg id="qr" viewBox="0 0 29 29" shape-rendering="crispEdges"></svg></div>
+    <div class="timer"><svg class="ring" viewBox="0 0 36 36"><circle cx="18" cy="18" r="15" fill="none" stroke="rgba(255,255,255,.2)" stroke-width="4"/><circle id="ring" cx="18" cy="18" r="15" fill="none" stroke="#f3b53d" stroke-width="4" stroke-linecap="round" stroke-dasharray="94.2" transform="rotate(-90 18 18)"/></svg><span>Cambia en <b id="secs">30</b> s</span></div>
+    <p style="margin-top:12px;font-size:14px">El código cambia solo. Una foto no sirve.</p>
+  </div>
+  <div class="ok" id="ov-ok"><div class="okbadge" id="ok-big">+1</div><h2 style="margin-top:18px" id="ok-title">¡Visita registrada!</h2><p style="margin-top:8px" id="ok-sub"></p></div>
+  <div class="demo"><button class="btn" id="sim">Simular: el cajero escanea</button></div>
+</div>
+
+<p class="note" id="note">Demostración con datos de ejemplo.</p>
+</div>
+
+<script>
+{
+const $=id=>document.getElementById(id);
+const fresh=()=>({name:'Gabriel',visits:4,redeemed:[],today:false,hist:[
+ {d:'12 nov',t:'Visita registrada',k:'v'},{d:'7 nov',t:'Visita registrada',k:'v'},
+ {d:'2 nov',t:'Visita registrada',k:'v'},{d:'28 oct',t:'Limonada de bienvenida canjeada',k:'r'},{d:'28 oct',t:'Primera visita',k:'v'}]});
+let S=fresh();
+const prizes=[{id:'papas',n:'Papas naturales',need:5,txt:'Al juntar 5 visitas'},{id:'combo',n:'Combo Burger BBQ',need:10,txt:'Al juntar 10 visitas'}];
+const icV='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12l5 5 9-10"/></svg>';
+const icR='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M12 8v12M3 8h18"/></svg>';
+const burger='<svg viewBox="0 0 40 40"><path d="M7 19a13 10 0 0 1 26 0z" fill="#6e1230"/><rect x="6" y="21" width="28" height="4" rx="2" fill="#e2412b"/><path d="M7 27h26a4 4 0 0 1-4 5H11a4 4 0 0 1-4-5z" fill="#6e1230"/></svg>';
+let mode='visit',tick=null,left=30,seed=7;
+
+function show(id){
+  document.querySelectorAll('.scr').forEach(s=>s.classList.toggle('on',s.id===id));
+  const inApp=['s-home','s-prem','s-promo','s-hist'].includes(id);
+  $('nav').classList.toggle('on',inApp);
+  document.querySelectorAll('.tab').forEach(t=>t.classList.toggle('on',t.dataset.tab===id));
+  render();
+}
+function render(){
+  const c=S.visits%5, full=S.visits>0&&c===0;
+  const n=full?5:c;
+  $('h-name').textContent=S.name;
+  $('h-count').textContent=n;
+  $('stamps').innerHTML=[0,1,2,3,4].map(i=>i<n?`<div class="st full">${burger}</div>`:(i===4?'<div class="st gift">Papas</div>':`<div class="st">${i+1}</div>`)).join('');
+  $('h-bar').style.width=(n/5*100)+'%';
+  const avail=prizes.filter(p=>S.visits>=p.need&&!S.redeemed.includes(p.id));
+  $('h-msg').innerHTML=avail.length?`<b style="color:var(--red)">¡Ganaste ${avail[0].n.toLowerCase()}!</b> Actívalas en Premios.`:`Te falta${5-n>1?'n':''} ${5-n} visita${5-n>1?'s':''} para tus papas gratis.`;
+  $('btn-here').disabled=S.today;
+  $('btn-here').textContent=S.today?'Ya registraste tu visita de hoy':'Estoy en Los Viñedos, mostrar mi QR';
+  $('here-msg').innerHTML=S.today?'Vuelve mañana para tu siguiente visita. <button class="link" id="nextday" style="font-size:13px;min-height:0;padding:4px">(Demo: pasar al día siguiente)</button>':'Enséñalo en caja al pagar. Una visita por día.';
+  if(S.today)$('nextday').onclick=()=>{S.today=false;render()};
+  $('p-total').textContent=S.visits;
+  $('prizes').innerHTML=prizes.map(p=>{
+    const done=S.redeemed.includes(p.id),ready=S.visits>=p.need&&!done,pct=Math.min(100,S.visits/p.need*100);
+    return `<div class="prize ${ready?'ready':''}"><div class="row"><h3>${p.n}</h3><span class="small">${done?'Canjeado':Math.min(S.visits,p.need)+'/'+p.need}</span></div>
+    <div class="bar"><i style="width:${done?100:pct}%"></i></div><p class="small" style="margin:8px 0 12px">${p.txt}</p>
+    <button class="btn ${ready?'mus':'alt'}" data-prize="${p.id}" ${ready?'':'disabled'}>${done?'Ya lo canjeaste':ready?'Activar y canjear':'Aún no disponible'}</button></div>`}).join('')+
+    `<div class="prize"><div class="row"><h3>Limonada de bienvenida</h3><span class="small">Canjeado</span></div><p class="small">Tu primera visita con la app.</p></div>`;
+  document.querySelectorAll('[data-prize]').forEach(b=>b.onclick=()=>openQR('prize',b.dataset.prize));
+  $('hist').innerHTML=S.hist.map(h=>`<div class="it"><div class="dot">${h.k==='r'?icR:icV}</div><div style="flex:1"><b>${h.t}</b><p class="small">${h.d}, Los Viñedos</p></div></div>`).join('');
+}
+function drawQR(){
+  let s=seed;const r=()=>(s=s*16807%2147483647)/2147483647;
+  const N=29,cells=[];
+  const finder=(x,y)=>{cells.push(`<rect x="${x}" y="${y}" width="7" height="7" fill="#1d1416"/><rect x="${x+1}" y="${y+1}" width="5" height="5" fill="#fff"/><rect x="${x+2}" y="${y+2}" width="3" height="3" fill="#1d1416"/>`)};
+  for(let y=0;y<N;y++)for(let x=0;x<N;x++){
+    const inF=(x<8&&y<8)||(x>N-9&&y<8)||(x<8&&y>N-9);
+    if(!inF&&r()>.52)cells.push(`<rect x="${x}" y="${y}" width="1" height="1" fill="${mode==='prize'?'#6e1230':'#1d1416'}"/>`);
+  }
+  finder(0,0);finder(N-7,0);finder(0,N-7);
+  $('qr').innerHTML=`<rect width="29" height="29" fill="#fff"/>`+cells.join('');
+}
+let prizeId=null;
+function openQR(m,p){
+  mode=m;prizeId=p||null;left=m==='prize'?60:30;seed=Math.floor(Math.random()*1e6)+1;
+  const pr=prizes.find(x=>x.id===p);
+  $('ov').classList.toggle('red',m==='prize');
+  $('ov-title').textContent=m==='prize'?`Canje: ${pr.n}`:'Tu visita de hoy';
+  $('ov-sub').textContent=m==='prize'?'Enséñalo en caja. El premio se quema al escanearlo.':'Enséñale este código al cajero.';
+  $('ov-live').style.display='flex';$('ov-ok').classList.remove('on');
+  $('sim').style.display='';$('sim').textContent='Simular: el cajero escanea';
+  $('ov').classList.add('on');drawQR();runTimer();
+}
+function runTimer(){
+  clearInterval(tick);
+  const total=left;
+  const upd=()=>{$('secs').textContent=left;$('ring').setAttribute('stroke-dashoffset',94.2*(1-left/total))};
+  upd();
+  tick=setInterval(()=>{left--;if(left<=0){left=total;seed=Math.floor(Math.random()*1e6)+1;drawQR()}upd()},1000);
+}
+function closeQR(){clearInterval(tick);$('ov').classList.remove('on');render()}
+$('sim').onclick=()=>{
+  if($('ov-ok').classList.contains('on')){closeQR();return}
+  clearInterval(tick);
+  $('ov-live').style.display='none';$('ov-ok').classList.add('on');
+  if(mode==='visit'){
+    S.visits++;S.today=true;S.hist.unshift({d:'Hoy',t:'Visita registrada',k:'v'});
+    const got=prizes.find(p=>S.visits===p.need);
+    $('ok-big').textContent='+1';$('ok-title').textContent='¡Visita registrada!';
+    $('ok-sub').textContent=got?`¡Completaste tu tarjeta! Ganaste ${got.n.toLowerCase()}.`:`Llevas ${S.visits} visitas. ¡Gracias por venir!`;
+  }else{
+    const pr=prizes.find(x=>x.id===prizeId);
+    S.redeemed.push(prizeId);S.hist.unshift({d:'Hoy',t:'Canje: '+pr.n,k:'r'});
+    $('ok-big').innerHTML='<svg viewBox="0 0 24 24" width="70" fill="none" stroke="#2a1a05" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg>';
+    $('ok-title').textContent='¡Premio canjeado!';
+    $('ok-sub').textContent=`${pr.n}: ¡que lo disfrutes! Este premio ya no se puede volver a usar.`;
+  }
+  $('sim').textContent='Listo';
+};
+$('ov-x').onclick=closeQR;
+$('btn-here').onclick=()=>openQR('visit');
+$('go-reg').onclick=()=>{$('reg-title').textContent='Crea tu cuenta';$('f-name').style.display='';$('reg-btn').textContent='Crear cuenta';show('s-reg')};
+$('go-login').onclick=()=>{$('reg-title').textContent='Inicia sesión';$('f-name').style.display='none';$('reg-btn').textContent='Entrar';show('s-reg')};
+document.querySelectorAll('[data-go]').forEach(b=>b.onclick=()=>show(b.dataset.go));
+$('f-reg').addEventListener('submit',e=>{e.preventDefault();
+  const n=$('nom').value.trim();if(n)S.name=n.split(' ')[0];
+  if($('f-name').style.display==='none'){show('s-home');return}
+  $('ver-mail').textContent=$('mail').value||'tu correo';show('s-ver')});
+$('ver-ok').onclick=()=>show('s-home');
+document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>show(t.dataset.tab));
+$('reset').onclick=()=>{S=fresh();show('s-hola')};
+render();
+}
+</script>
+</body>
+</html>
